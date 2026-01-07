@@ -1,13 +1,15 @@
-name: CI Test Runner
+name: Release Extension
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
 
 jobs:
-  test:
+  release:
     runs-on: ubuntu-latest
 
     steps:
@@ -23,8 +25,12 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run Tests
-        run: npm run test
-
-      - name: Build Check
+      - name: Build Extension
         run: npm run build
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/*.zip
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
