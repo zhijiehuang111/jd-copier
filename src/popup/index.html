@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
@@ -8,20 +8,20 @@
     <img src="/jd-copier-icon.png" alt="Logo" class="logo" />
 
     <h1>JD Copier</h1>
-    <p>複製選取內容，自動補上標題與連結</p>
+    <p data-i18n="description">複製選取內容，自動補上標題與連結</p>
 
     <div class="instruction">
       <div class="step">
         <span class="num">1</span>
-        <span>選取網頁上的職缺內容</span>
+        <span data-i18n="step1">選取網頁上的職缺內容</span>
       </div>
       <div class="step">
         <span class="num">2</span>
-        <span>點擊滑鼠 <b>右鍵</b></span>
+        <span data-i18n="step2">點擊滑鼠 <b>右鍵</b></span>
       </div>
       <div class="step">
         <span class="num">3</span>
-        <span>選擇 <b>Copy with Title and Link</b></span>
+        <span data-i18n="step3">選擇 <b>Copy with Title and Link</b></span>
       </div>
     </div>
 
@@ -30,8 +30,11 @@
         href="https://github.com/zhijiehuang111/jd-copier/issues"
         target="_blank"
         rel="noopener noreferrer"
+        data-i18n="reportIssue"
         >回報問題</a
       >
     </div>
+
+    <script type="module" src="./i18n.ts"></script>
   </body>
 </html>

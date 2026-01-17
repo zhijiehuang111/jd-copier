@@ -1,27 +1,21 @@
+import { getCleanLinkedInUrl, generateCopyFormats } from "../utils/formatters";
+
 function processLinkedInJobPage(
   originalUrl: string,
-  originalTitle: string
+  originalTitle: string,
 ): { url: string; title: string } {
-  if (
-    !originalUrl.includes("linkedin.com") ||
-    !originalUrl.includes("currentJobId")
-  ) {
+  const cleanUrl = getCleanLinkedInUrl(originalUrl);
+
+  // If URL wasn't changed, it's not a LinkedIn job page we can process
+  if (cleanUrl === originalUrl) {
     return { url: originalUrl, title: originalTitle };
   }
-
-  const jobIdMatch = originalUrl.match(/currentJobId=(\d+)/);
-  if (!jobIdMatch) {
-    return { url: originalUrl, title: originalTitle };
-  }
-
-  const currentJobId = jobIdMatch[1];
-  const cleanUrl = `https://www.linkedin.com/jobs/view/${currentJobId}`;
 
   const jobTitleElement = document.querySelector(
-    "div.job-details-jobs-unified-top-card__job-title h1"
+    "div.job-details-jobs-unified-top-card__job-title h1",
   );
   const companyNameElement = document.querySelector(
-    "div.job-details-jobs-unified-top-card__company-name"
+    "div.job-details-jobs-unified-top-card__company-name",
   );
 
   const jobTitle = jobTitleElement?.textContent?.trim() || "";
@@ -57,12 +51,12 @@ chrome.runtime.onMessage.addListener(async (message) => {
     const rawHtml = div.innerHTML;
     const rawText = selection.toString();
 
-    const finalHtmlStr = `
-      <h1><a href="${url}">${title}</a></h1>
-      <div>${rawHtml}</div>
-    `;
-
-    const finalPlainStr = `[${title}](${url})\n\n${rawText}`;
+    const { html: finalHtmlStr, plain: finalPlainStr } = generateCopyFormats(
+      title,
+      url,
+      rawHtml,
+      rawText,
+    );
 
     try {
       await navigator.clipboard.write([
